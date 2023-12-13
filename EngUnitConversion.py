@@ -288,6 +288,44 @@ class Pressure(EngUnit):
         'inHg' : 29.53
     }
 
+    def __init__(self, value, unit):
+        #super().__init__(value, unit)
+        self.value = value
+        self.unit = unit
+
+    def convert(self, to_unit):
+        """
+        Converts a pressure value from one unit of measure to another.
+        Return a float value of pressure in a requested units.
+        Return None for incorrect value.
+
+        Parameters
+        ---------------
+        value : float
+            Value of the pressure measurement.\n
+        from_unit : str
+            Unit of measurement to convert from.\n
+        to_unit : str
+            Unit of measurement to convert to.
+        """
+
+        pressure_bar = 0
+        from_unit = self.unit
+        to_unit = to_unit
+        if from_unit[-2:] == '_g':
+            pressure_bar = float(self.value) / float(self.conversions[from_unit[:-2]]) * float(self.conversions['bar'])
+            pressure_bar += 1 / float(self.conversions['atm'])
+        else:
+            pressure_bar = float(self.value) / float(self.conversions[from_unit]) * float(self.conversions['bar'])
+
+        # Return value in required unit
+        if to_unit[-2:] == '_g':
+            pressure_bar = pressure_bar / float(self.conversions['bar']) * float(self.conversions[to_unit[:-2]])
+            pressure_bar = pressure_bar - float(self.conversions['atm'])
+            return pressure_bar
+        else:
+            return pressure_bar / float(self.conversions['bar']) * float(self.conversions[to_unit])
+
 
 class Mass(EngUnit):
     """Creates a mass object that can store a mass value and 
