@@ -1,27 +1,27 @@
 class EngUnit(object):
     """Generic class for engineering unit objects containing a float value and string unit."""
     
-    numerator = []
-    denominator = []
+    #numerator = []
+    #denominator = []
     conversions = dict()
     
     def __init__(self, value, unit):
         super().__init__()
         self.value = value
         self.unit = unit
-        self.baseUnit = dict(zip(self.conversions.values(), self.conversions.keys()))[1]
+        #self.baseUnit = dict(zip(self.conversions.values(), self.conversions.keys()))[1]
 
-    def convert(self, to_unit):
-        """Converts the object from one unit to another."""
+    def convert(self, to_unit: str) -> float:
+        """Converts the current value of the object to new unit. Returns a float of the new value."""
         from_unit = self.unit
         to_unit = to_unit
         return float(self.value) / float(self.conversions[from_unit]) * float(self.conversions[to_unit])
         
     def changeUnit(self, unit):
-        """Converts the current value of the object to a new unit.  Returns a float of the new value."""
+        """Converts the object from one unit to another."""
         self.value = self.convert(unit)
         self.unit = unit
-        return float(self.value)
+        #return float(self.value)
 
     def setValue(self, value, unit):
         """Sets the value and unit of the object"""
@@ -36,27 +36,27 @@ class EngUnit(object):
         return str(self.value) + ' ' + self.unit
 
     def __add__(self, other):
-        new_value = self.value + other.changeUnit(self.unit)
+        new_value = self.value + other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __sub__(self, other):
-        new_value = self.value - other.changeUnit(self.unit)
+        new_value = self.value - other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __mul__(self, other):
-        new_value = self.value * other
+        new_value = self.value * other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __rmul__(self, other):
-        new_value = self.value * other
+        new_value = self.value * other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __truediv__(self, other):
-        new_value = self.value / other
+        new_value = self.value / other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __floordiv__(self, other):
-        new_value = self.value // other
+        new_value = self.value // other.convert(self.unit)
         return self.__class__(new_value, self.unit)
 
     def __pow__(self, other):
@@ -268,6 +268,10 @@ class Pressure(EngUnit):
         ftH2O = 'ftH2O' 
         inH2O = 'inH2O' 
         inHg = 'inHg' 
+        bar_g = 'bar_g'
+        kPa_g = 'kPa_g'
+        psi_g = 'pis_g'
+        kgcm2_g = 'kgcm2_g'
     
     conversions = {
         'bar' : 1.0,
@@ -289,7 +293,7 @@ class Pressure(EngUnit):
     }
 
     def __init__(self, value, unit):
-        #super().__init__(value, unit)
+        super().__init__(value, unit)
         self.value = value
         self.unit = unit
 
