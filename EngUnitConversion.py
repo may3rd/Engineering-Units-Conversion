@@ -36,32 +36,66 @@ class EngUnit(object):
         return str(self.value) + ' ' + self.unit
 
     def __add__(self, other):
-        new_value = self.value + other.convert(self.unit)
+        if type(self) is type(other):
+            new_value = self.value + other.convert(self.unit)
+        elif isinstance(other, (int, float)):
+            new_value = self.value + other
+        else:
+            print("Other should be the same class.")
+            return
         return self.__class__(new_value, self.unit)
 
     def __sub__(self, other):
-        new_value = self.value - other.convert(self.unit)
+        if type(self) is type(other):
+            new_value = self.value - other.convert(self.unit)
+        elif isinstance(other, (int, float)):
+            new_value = self.value - other
+        else:
+            print("Other should be the same class.")
+            return
         return self.__class__(new_value, self.unit)
-
-    def __mul__(self, other):
-        new_value = self.value * other.convert(self.unit)
-        return self.__class__(new_value, self.unit)
-
-    def __rmul__(self, other):
-        new_value = self.value * other.convert(self.unit)
-        return self.__class__(new_value, self.unit)
-
-    def __truediv__(self, other):
-        new_value = self.value / other.convert(self.unit)
-        return self.__class__(new_value, self.unit)
-
-    def __floordiv__(self, other):
-        new_value = self.value // other.convert(self.unit)
-        return self.__class__(new_value, self.unit)
-
-    def __pow__(self, other):
-        new_value = self.value ** other
-        return self.__class__(new_value, self.unit)
+    
+    def __eq__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value == new_value
+        else:
+            return False
+    
+    def __ne__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value != new_value
+        else:
+            return False
+    
+    def __lt__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value < new_value
+        else:
+            return False
+    
+    def __gt__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value > new_value
+        else:
+            return False
+    
+    def __le__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value <= new_value
+        else:
+            return False
+    
+    def __ge__(self, other):
+        if type(self) is type(other):
+            new_value = other.convert(self.unit)
+            return self.value >= new_value
+        else:
+            return False
 
 
 class Temperature(EngUnit):
